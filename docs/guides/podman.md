@@ -4,7 +4,7 @@ Under Linux, it is possible to use [podman](https://podman.io/) instead of [dock
 
 In order to do this you need to run `podman` as a service. You can do this with the following command.
 ```
-❯ podman system service --time=0
+❯ systemctl start --user podman.socket
 ```
 This will serve the Docker API on a UNIX socket at `/run/user/{uid}/podman/podman.sock`.
 
