@@ -1,7 +1,7 @@
 # WASI/WebAssembly Integration Architecture
 
-> **Status:** Proposal  
-> **Jira:** SRVOCF-750  
+> **Status:** Proposal
+> **Jira:** SRVOCF-750
 > **Target:** func CLI v0.37.0+
 
 ## Overview
@@ -116,10 +116,10 @@ metadata:
 spec:
   # REQUIRED: OCI reference to the WASM module
   image: quay.io/myuser/my-wasm-function:latest
-  
+
   # Command line arguments
   args: ["--verbose"]
-  
+
   # Environment variables (full K8s EnvVar support)
   env:
     - name: LOG_LEVEL
@@ -129,7 +129,7 @@ spec:
         secretKeyRef:
           name: db-credentials
           key: password
-  
+
   # WASI network permissions (disabled by default)
   network:
     allowIpNameLookup: true     # DNS resolution
@@ -139,7 +139,7 @@ spec:
         - "db-default.svc:5432"
         - "db-default.svc.cluster.local:5432"
       # bind: []               # Rarely needed - HTTP handled by runner
-  
+
   # Resource limits
   resources:
     requests:
@@ -147,13 +147,13 @@ spec:
     limits:
       memory: "256Mi"
       cpu: "100m"               # Converted to fuel units
-  
+
   # Kubernetes volumes
   volumes:
     - name: config
       configMap:
         name: my-config
-  
+
   # Mounted as WASI preopened directories
   volumeMounts:
     - name: config
