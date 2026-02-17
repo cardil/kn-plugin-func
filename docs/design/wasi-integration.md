@@ -48,10 +48,10 @@ This document covers:
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
 │                              Developer                                   │
-│  func.yaml ──► func build --builder wasm ──► func deploy --deployer wasm │
-└──────────────────────────┬─────────────────────────────┬─────────────────┘
-                           │                             │
-                           ▼                             ▼
+│              func.yaml ──► func build ──► func deploy                    │
+└──────────────────────────────────────┬─────────────────┬─────────────────┘
+                                       │                 │
+                                       ▼                 ▼
 ┌──────────────────────────────────────┐  ┌───────────────────────────────┐
 │          Build Pipeline              │  │        Deploy Pipeline        │
 │                                      │  │                               │
@@ -64,6 +64,8 @@ This document covers:
                                           │        Execute WASM           │
                                           └───────────────────────────────┘
 ```
+
+> **Note:** When `runtime` is a WASI variant (e.g., `rust-wasi`, `go-wasi`), the CLI automatically infers `builder: wasm` and `deployer: wasm`. No explicit flags needed.
 
 ### Build Pipeline Detail
 
@@ -193,18 +195,15 @@ Languages with WASI Preview 2 (wasip2) support:
 | `dotnet-wasi` | .NET WASI SDK | `dotnet build -c Release` | Experimental |
 | `swift-wasi` | SwiftWasm | `swift build --triple wasm32-unknown-wasi` | Experimental |
 
-### Runtime Detection
+### Runtime Selection
 
-The builder detects the runtime from project files:
+The runtime is specified in [`func.yaml`](../../pkg/functions/function.go) when creating a new function. Users choose the appropriate WASI runtime template during `func create`:
 
-| File | Runtime |
-|------|---------|
-| `Cargo.toml` | `rust-wasi` |
-| `go.mod` | `go-wasi` |
-| `pyproject.toml` | `python-wasi` |
-| `package.json` | `js-wasi` |
-| `CMakeLists.txt` or `Makefile` with `.c` files | `c-wasi` |
-| `CMakeLists.txt` or `Makefile` with `.cpp` files | `cpp-wasi` |
+```bash
+func create --language rust-wasi my-function
+```
+
+This sets `runtime: rust-wasi` in func.yaml, which determines the build toolchain and deployment target.
 
 ### Prerequisites
 
